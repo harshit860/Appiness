@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
+import React,{useState} from 'react';
 import './App.css';
+import Login from './Components/login';
+import { BrowserRouter, Route, Link ,Redirect} from 'react-router-dom'
+import EmployeeList from './Components/EmployeeList';
+import {connect} from 'react-redux'
 
-function App() {
+function App(props) {
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <div>
+          <Link to='/' ></Link>
+        </div>
+        <div>
+          <Route path="/" exact component={Login} ></Route>
+          <Route path="/Employee" component={EmployeeList} ></Route>
+          {props.loginflag ? (
+            <Redirect to="/Employee" />
+          ) : (
+            <Redirect to="/" />
+          ) }
+         
+        </div>
+        
+      </div>
+    </BrowserRouter>
+
   );
 }
 
-export default App;
+const mapStateToProps = state =>{
+  return {
+      loginflag:state.auth.isAuth
+  }
+}
+export default connect(
+  mapStateToProps
+)(App);
